@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boston Employee Earnings Analysis - Capstone Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            overflow: hidden;
+        }
+        
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .slide {
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            margin: 5vh auto;
+            background: white;
+            border-radius: 20px;
+            padding: 60px 80px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: flex;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        h1 {
+            color: #1e3c72;
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #2a5298;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #1e3c72;
+            padding-bottom: 15px;
+        }
+        
+        h3 {
+            color: #1e3c72;
+            font-size: 1.8em;
+            margin: 20px 0 15px 0;
+        }
+        
+        p, li {
+            font-size: 1.4em;
+            line-height: 1.8;
+            color: #333;
+            margin: 10px 0;
+        }
+        
+        .subtitle {
+            font-size: 1.6em;
+            color: #555;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #ffd700 0%, #ffed4e 100%);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .big-number {
+            font-size: 4em;
+            color: #1e3c72;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .emoji {
+            font-size: 1.5em;
+        }
+        
+        ul {
+            margin-left: 40px;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .box {
+            background: #f0f4ff;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 6px solid #1e3c72;
+        }
+        
+        .box h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+        
+        button {
+            background: white;
+            border: 3px solid #1e3c72;
+            color: #1e3c72;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #1e3c72;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            color: #999;
+            font-size: 1.2em;
+        }
+        
+        .image-placeholder {
+            background: #e8f0ff;
+            border: 3px dashed #1e3c72;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.3em;
+            color: #1e3c72;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+        
+        th {
+            background: #1e3c72;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background: #f0f4ff;
+        }
+        
+        .center {
+            text-align: center;
+        }
+        
+        .green {
+            color: #22c55e;
+            font-weight: bold;
+        }
+        
+        .red {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        
+        .blue {
+            color: #1e3c72;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        
+        <!-- SLIDE 1: Title -->
+        <div class="slide active">
+            <h1>Multi-Year Predictive Analytics of Employee Earnings in Boston</h1>
+            <p class="subtitle">(2022-2024)</p>
+            <div class="big-number">💼📊💰</div>
+            <p class="subtitle">Dev Panchal & Om Patel</p>
+            <p class="subtitle">ALY 6140 - Python & Analytics</p>
+            <p class="subtitle">Northeastern University, Fall 2025</p>
+            <div class="slide-number">1 / 21</div>
+        </div>
+        
+        <!-- SLIDE 2: Why This Matters -->
+        <div class="slide">
+            <h2>💰 Why Does This Matter?</h2>
+            <div class="big-number">$2.4 BILLION</div>
+            <p class="center" style="font-size: 1.8em;">That's how much Boston spends on employee salaries per year!</p>
+            
+            <div class="box" style="margin-top: 40px;">
+                <h3>🎯 Our Goal</h3>
+                <p style="font-size: 1.6em;">Build a "crystal ball" to predict future salaries and help city leaders plan budgets</p>
+            </div>
+            
+            <div class="grid-2" style="margin-top: 30px;">
+                <div class="box">
+                    <p class="emoji">🏛️</p>
+                    <p><strong>City Leaders Need:</strong> Accurate budget forecasts</p>
+                </div>
+                <div class="box">
+                    <p class="emoji">💡</p>
+                    <p><strong>We Provide:</strong> Data-driven predictions</p>
+                </div>
+            </div>
+            <div class="slide-number">2 / 21</div>
+        </div>
+        
+        <!-- SLIDE 3: Research Questions -->
+        <div class="slide">
+            <h2>❓ Our 7 Big Questions</h2>
+            <ul style="font-size: 1.3em; line-height: 2;">
+                <li><strong>1️⃣</strong> Can we predict salary from job and department?</li>
+                <li><strong>2️⃣</strong> How important is overtime to total pay?</li>
+                <li><strong>3️⃣</strong> What matters most: department or job title?</li>
+                <li><strong>4️⃣</strong> Are there hidden patterns computers can find?</li>
+                <li><strong>5️⃣</strong> What will Boston spend in 2025?</li>
+                <li><strong>6️⃣</strong> Will overtime costs go up or down?</li>
+                <li><strong>7️⃣</strong> Do salaries follow seasonal patterns?</li>
+            </ul>
+            <p class="center" style="margin-top: 40px; font-size: 1.5em; color: #1e3c72;">
+                <strong>Spoiler Alert:</strong> We answered all 7! 🎉
+            </p>
+            <div class="slide-number">3 / 21</div>
+        </div>
+        
+        <!-- SLIDE 4: Our Data -->
+        <div class="slide">
+            <h2>📊 The Data We Used</h2>
+            <div class="big-number">74,546</div>
+            <p class="center" style="font-size: 1.8em;">That's <span class="highlight">74 THOUSAND</span> employee records!</p>
+            
+            <div class="grid-3" style="margin-top: 40px;">
+                <div class="box center">
+                    <p class="emoji" style="font-size: 3em;">📅</p>
+                    <h3>2022</h3>
+                    <p>23,204 employees</p>
+                </div>
+                <div class="box center">
+                    <p class="emoji" style="font-size: 3em;">📅</p>
+                    <h3>2023</h3>
+                    <p>25,812 employees</p>
+                </div>
+                <div class="box center">
+                    <p class="emoji" style="font-size: 3em;">📅</p>
+                    <h3>2024</h3>
+                    <p>25,530 employees</p>
+                </div>
+            </div>
+            
+            <div class="box" style="margin-top: 30px;">
+                <p><strong>12 pieces of info per person:</strong> Name, Department, Job Title, Regular Pay, Overtime, Bonuses, Total Salary</p>
+                <p style="margin-top: 10px;"><strong>Source:</strong> Boston's Open Data Portal (anyone can download this!)</p>
+            </div>
+            <div class="slide-number">4 / 21</div>
+        </div>
+        
+        <!-- SLIDE 5: Data Cleaning -->
+        <div class="slide">
+            <h2>🧹 Cleaning the Messy Data</h2>
+            
+            <div class="grid-2">
+                <div class="box" style="background: #fee;">
+                    <h3 style="color: #ef4444;">❌ BEFORE Cleaning</h3>
+                    <ul style="font-size: 1.2em;">
+                        <li>413,175 empty cells</li>
+                        <li>Numbers had commas</li>
+                        <li>Inconsistent column names</li>
+                        <li>Mixed up data types</li>
+                    </ul>
+                </div>
+                <div class="box" style="background: #efe;">
+                    <h3 style="color: #22c55e;">✅ AFTER Cleaning</h3>
+                    <ul style="font-size: 1.2em;">
+                        <li>338,535 cells filled</li>
+                        <li>All numbers standardized</li>
+                        <li>Fixed column names</li>
+                        <li>Ready for analysis!</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="box" style="margin-top: 30px; background: #fff4e6;">
+                <h3>🛠️ What We Created</h3>
+                <p><strong>4 new features:</strong> Overtime %, Overtime Flag, Total Bonuses, Pay Categories</p>
+            </div>
+            
+            <p class="center" style="margin-top: 30px; font-size: 1.5em;">
+                <span class="green">Result: Clean dataset ready to analyze! ✨</span>
+            </p>
+            <div class="slide-number">5 / 21</div>
+        </div>
+        
+        <!-- SLIDE 6: Salary Distribution -->
+        <div class="slide">
+            <h2>💵 Who Gets Paid What?</h2>
+            
+            <div class="image-placeholder">
+                <img src="/eda_distribution.png" width="900px">
+                <!-- 📊 INSERT IMAGE: eda_distribution.png -->
+                <!-- <br>(Distribution histogram and box plot) -->
+            </div>
+            
+            <div class="grid-2">
+                <div class="box">
+                    <h3>📈 The Numbers</h3>
+                    <p><strong>Average:</strong> $87,099</p>
+                    <p><strong>Median:</strong> $81,064</p>
+                    <p><strong>Range:</strong> $0 to $1,112,348!</p>
+                </div>
+                <div class="box">
+                    <h3>🍕 The Pattern</h3>
+                    <p>Like a pizza slice:</p>
+                    <p>• Lots at the bottom</p>
+                    <p>• Few at the top</p>
+                    <p>• Most earn: $25K-$130K</p>
+                </div>
+            </div>
+            <div class="slide-number">6 / 21</div>
+        </div>
+        
+        <!-- SLIDE 7: Department Rankings -->
+        <div class="slide">
+            <h2>🏢 Which Departments Pay Most?</h2>
+            
+            <div class="image-placeholder">
+                <!-- 📊 INSERT IMAGE: eda_department.png -->
+                <!-- <br>(Top 10 departments bar chart) -->
+                <img src="/eda_department.png" width="900px">
+            </div>
+            
+            <div class="grid-2" style="margin-top: 20px;">
+                <div class="box" style="background: #dcfce7;">
+                    <h3 class="green">💰 TOP 3 (Highest)</h3>
+                    <p>🔥 Fire: <strong>$164,816</strong></p>
+                    <p>👮 Police: <strong>$146,764</strong></p>
+                    <p>🏗️ Public Works: <strong>$70,977</strong></p>
+                </div>
+                <div class="box" style="background: #fee2e2;">
+                    <h3 class="red">💸 BOTTOM 3 (Lowest)</h3>
+                    <p>🍎 Food Services: <strong>$27,648</strong></p>
+                    <p>🚌 Transportation: <strong>$27,503</strong></p>
+                    <p>👩‍🏫 Substitute Teachers: <strong>$17,542</strong></p>
+                </div>
+            </div>
+            
+            <p class="center" style="margin-top: 20px; font-size: 1.4em;">
+                <span class="highlight">The Difference: $147,274 between top and bottom!</span>
+            </p>
+            <div class="slide-number">7 / 21</div>
+        </div>
+        
+        <!-- SLIDE 8: Overtime Story -->
+        <div class="slide">
+            <h2>⏰ The Overtime Story</h2>
+            
+            <div class="image-placeholder">
+                <!-- 📊 INSERT IMAGE: eda_overtime.png
+                <br>(Overtime scatter plot and histogram) -->
+                <img src="/eda_overtime.png" width="900px">
+            </div>
+            
+            <div class="grid-3" style="margin-top: 20px;">
+                <div class="box center">
+                    <div class="big-number" style="font-size: 3em;">29.3%</div>
+                    <p>of employees get overtime</p>
+                    <p style="font-size: 0.9em;">(about 1 in 3)</p>
+                </div>
+                <div class="box center">
+                    <div class="big-number" style="font-size: 3em; color: #22c55e;">$21,566</div>
+                    <p>average overtime per person</p>
+                </div>
+                <div class="box center">
+                    <div class="big-number" style="font-size: 3em; color: #ef4444;">$200K+</div>
+                    <p>some earn just from overtime!</p>
+                </div>
+            </div>
+            
+            <p class="center" style="margin-top: 20px; font-size: 1.4em;">
+                <strong>Who gets most?</strong> 🔥 Firefighters & 👮 Police (emergencies don't follow 9-5!)
+            </p>
+            <div class="slide-number">8 / 21</div>
+        </div>
+        
+        <!-- SLIDE 9: Correlations -->
+        <div class="slide">
+            <h2>🔗 How Everything Connects</h2>
+            
+            <div class="image-placeholder">
+                <!-- 📊 INSERT IMAGE: eda_correlation.png
+                <br>(Correlation heatmap) -->
+                <img src="/eda_correlation.png" width="900px">
+            </div>
+            
+            <div class="grid-3" style="margin-top: 20px;">
+                <div class="box" style="background: #dcfce7;">
+                    <h3 class="green">Strong ✅</h3>
+                    <p>Regular Pay ↔ Total Pay</p>
+                    <p>(0.90 correlation)</p>
+                    <p style="font-size: 0.9em;">Your base salary = most of your pay</p>
+                </div>
+                <div class="box" style="background: #fef3c7;">
+                    <h3 style="color: #d97706;">Medium 🟡</h3>
+                    <p>Overtime ↔ Total Pay</p>
+                    <p>(0.50 correlation)</p>
+                    <p style="font-size: 0.9em;">Overtime helps, but isn't everything</p>
+                </div>
+                <div class="box" style="background: #fee2e2;">
+                    <h3 class="red">Weak 🔴</h3>
+                    <p>Year ↔ Total Pay</p>
+                    <p>(0.10 correlation)</p>
+                    <p style="font-size: 0.9em;">Salaries stayed stable 2022-2024</p>
+                </div>
+            </div>
+            <div class="slide-number">9 / 21</div>
+        </div>
+        
+        <!-- SLIDE 10: Three Models Overview -->
+        <div class="slide">
+            <h2>🤖 Our Three "Crystal Balls"</h2>
+            
+            <div class="grid-3">
+                <div class="box center" style="background: #dbeafe;">
+                    <p class="emoji" style="font-size: 4em;">🔵</p>
+                    <h3>Linear Regression</h3>
+                    <p>Like drawing a straight line</p>
+                    <p><strong>Superpower:</strong> Easy to explain</p>
+                    <p class="blue">Accuracy: 40%</p>
+                </div>
+                <div class="box center" style="background: #dcfce7;">
+                    <p class="emoji" style="font-size: 4em;">🌲</p>
+                    <h3>Random Forest</h3>
+                    <p>100 smart guesses averaged</p>
+                    <p><strong>Superpower:</strong> Finds patterns</p>
+                    <p class="green">Accuracy: 40%</p>
+                </div>
+                <div class="box center" style="background: #fef3c7;">
+                    <p class="emoji" style="font-size: 4em;">⏰</p>
+                    <h3>ARIMA</h3>
+                    <p>Time-traveling model</p>
+                    <p><strong>Superpower:</strong> Predicts future</p>
+                    <p style="color: #d97706;"><strong>2025: $2.45B</strong></p>
+                </div>
+            </div>
+            
+            <p class="center" style="margin-top: 30px; font-size: 1.4em;">
+                Each model has different superpowers! 🦸
+            </p>
+            <div class="slide-number">10 / 21</div>
+        </div>
+        
+        <!-- SLIDE 11: Linear Regression -->
+        <div class="slide">
+            <h2>📊 Model 1: Linear Regression</h2>
+            <h3 class="center">"How much does your department add to your salary?"</h3>
+            
+            <div class="image-placeholder">
+                <!-- 📊 INSERT IMAGE: lr_coefficients.png
+                <br>(Coefficient bar chart) -->
+                <img src="/lr_coefficients.png" width="900px">
+
+            </div>
+            
+            <div class="grid-2">
+                <div class="box" style="background: #dcfce7;">
+                    <h3>💰 The Answer in Dollars</h3>
+                    <p>🔥 Fire: <strong class="green">+$99,473</strong></p>
+                    <p>👮 Police: <strong class="green">+$59,071</strong></p>
+                    <p>📚 Teacher: <strong class="green">+$35,685</strong></p>
+                    <p>🚌 Transportation: <strong class="red">-$47,669</strong></p>
+                </div>
+                <div class="box">
+                    <h3>🎯 What This Means</h3>
+                    <p>Being a firefighter adds almost <span class="highlight">$100,000</span> to your paycheck!</p>
+                    <p style="margin-top: 10px; font-size: 1.1em;">Police adds $59K extra</p>
+                    <p style="margin-top: 10px; font-size: 1.1em;">Accuracy: <strong>40%</strong></p>
+                </div>
+            </div>
+            <div class="slide-number">11 / 21</div>
+        </div>
+        
+        <!-- SLIDE 12: Random Forest -->
+        <div class="slide">
+            <h2>🌲 Model 2: Random Forest</h2>
+            <h3 class="center">"What matters MOST for predicting salary?"</h3>
+            
+            <div class="image-placeholder">
+                📊 INSERT IMAGE: rf_feature_importance.png
+                <br>(Feature importance bar chart)
+                <img src="/rf_feature_importance.png" width="900px">
+
+            </div>
+            
+            <div class="grid-2">
+                <div class="box">
+                    <h3>🏆 Importance Rankings</h3>
+                    <p>🥇 Fire Department: <strong>34%</strong></p>
+                    <p>🥈 Police Department: <strong>30%</strong></p>
+                    <p>🥉 Teacher Title: <strong>15%</strong></p>
+                    <p>4️⃣ Other Titles: <strong>11%</strong></p>
+                    <p>5️⃣ Year: <strong>3%</strong></p>
+                </div>
+                <div class="box" style="background: #fef3c7;">
+                    <h3>💡 The Simple Story</h3>
+                    <p style="font-size: 1.3em;"><strong>Fire + Police = 64%</strong> of prediction power!</p>
+                    <p style="margin-top: 15px;">Translation: Your department matters MORE than anything else!</p>
+                </div>
+            </div>
+            <div class="slide-number">12 / 21</div>
+        </div>
+        
+        <!-- SLIDE 13: Prediction Accuracy -->
+        <div class="slide">
+            <h2>🎯 How Good Are Our Predictions?</h2>
+            
+            <div class="image-placeholder">
+                📊 INSERT IMAGE: actual_vs_predicted.png
+                <br>(Actual vs predicted scatter plots)
+                <img src="/actual_vs_predicted.png" width="900px">
+
+            </div>
+            
+            <div class="box" style="background: #e0f2fe; margin-top: 20px;">
+                <h3>The Challenge:</h3>
+                <p style="font-size: 1.3em;">Predict salary WITHOUT knowing overtime or bonuses—just from department, title, and year!</p>
+            </div>
+            
+            <div class="grid-2" style="margin-top: 20px;">
+                <div class="box center">
+                    <div class="big-number" style="font-size: 3.5em; color: #22c55e;">40%</div>
+                    <p>We can predict!</p>
+                </div>
+                <div class="box center">
+                    <div class="big-number" style="font-size: 3.5em; color: #ef4444;">60%</div>
+                    <p>Individual factors</p>
+                </div>
+            </div>
+            
+            <p class="center" style="margin-top: 20px; font-size: 1.2em;">
+                40% is GREAT for using only 3 pieces of info! 🎉
+            </p>
+            <div class="slide-number">13 / 21</div>
+        </div>
+        
+        <!-- SLIDE 14: ARIMA Forecast -->
+        <div class="slide">
+            <h2>🔮 Predicting the Future</h2>
+            
+            <div class="image-placeholder">
+                📊 INSERT IMAGE: arima_forecast.png
+                <br>(Time series forecast chart)
+                <img src="/arima_forecast.png" width="900px">
+
+            </div>
+            
+            <div class="grid-3" style="margin-top: 20px;">
+                <div class="box center">
+                    <p class="emoji" style="font-size: 2.5em;">📅</p>
+                    <h3>2022</h3>
+                    <p class="big-number" style="font-size: 2em;">$1.93B</p>
+                </div>
+                <div class="box center">
+                    <p class="emoji" style="font-size: 2.5em;">📅</p>
+                    <h3>2023</h3>
+                    <p class="big-number" style="font-size: 2em;">$2.14B</p>
+                </div>
+                <div class="box center">
+                    <p class="emoji" style="font-size: 2.5em;">📅</p>
+                    <h3>2024</h3>
+                    <p class="big-number" style="font-size: 2em;">$2.42B</p>
+                </div>
+            </div>
+            
+            <div class="box center" style="margin-top: 20px; background: linear-gradient(120deg, #ffd700 0%, #ffed4e 100%);">
+                <h3>🎯 Our 2025 Prediction</h3>
+                <p class="big-number" style="font-size: 3em;">$2.45 Billion</p>
+                <p style="font-size: 1.3em;">Growth Rate: 1.42% per year</p>
+            </div>
+            <div class="slide-number">14 / 21</div>
+        </div>
+        
+        <!-- SLIDE 15: Key Findings (Baby Language!) -->
+        <div class="slide">
+            <h2>🎯 What Did We Learn?</h2>
+            <h3 class="center" style="color: #22c55e;">(Explained Like You're Five!)</h3>
+            
+            <div class="box" style="background: #dbeafe; margin: 20px 0;">
+                <h3>1️⃣ Department is KING 👑</h3>
+                <p style="font-size: 1.3em;">• Where you work = <strong>40% of your salary</strong></p>
+                <p style="font-size: 1.3em;">• Fire adds <span class="highlight">+$99,473</span></p>
+                <p style="font-size: 1.3em;">• Police adds <span class="highlight">+$59,071</span></p>
+            </div>
+            
+            <div class="box" style="background: #dcfce7; margin: 20px 0;">
+                <h3>2️⃣ Overtime Matters 💰</h3>
+                <p style="font-size: 1.3em;">• 1 in 3 employees get it</p>
+                <p style="font-size: 1.3em;">• Average: <strong>$21,566</strong> extra per year</p>
+                <p style="font-size: 1.3em;">• Some make <strong>$200K</strong> just from overtime!</p>
+            </div>
+            
+            <div class="box" style="background: #fef3c7; margin: 20px 0;">
+                <h3>3️⃣ We Can Predict the Future 🔮</h3>
+                <p style="font-size: 1.3em;">• 2025 Budget Needed: <strong>$2.45 Billion</strong></p>
+                <p style="font-size: 1.3em;">• Growth: <strong>1.42%</strong> per year</p>
+            </div>
+            
+            <p class="center" style="margin-top: 30px; font-size: 1.6em; color: #1e3c72;">
+                <strong>Bottom Line:</strong> Want to make $$$ in Boston? Become a firefighter! 🚒
+            </p>
+            <div class="slide-number">15 / 21</div>
+        </div>
+        
+        <!-- SLIDE 16: Statistical Proof -->
+        <div class="slide">
+            <h2>📊 The Statistics Say...</h2>
+            <h3 class="center">(Our findings are REAL, not luck!)</h3>
+            
+            <div class="box center" style="background: #dcfce7; margin: 30px 0;">
+                <h3>ANOVA Test Result</h3>
+                <p class="big-number" style="font-size: 2.5em;">F = 2276.56</p>
+                <p style="font-size: 1.4em;">p-value < 0.000001</p>
+                <p style="font-size: 1.6em; margin-top: 20px; color: #22c55e;">
+                    <strong>Translation: We're 99.9999% sure departments affect salary!</strong>
+                </p>
+            </div>
+            
+            <div class="grid-2">
+                <div class="box center">
+                    <h3>📉 Both Models Agree</h3>
+                    <p>Linear: <strong>40%</strong></p>
+                    <p>Random Forest: <strong>40%</strong></p>
+                    <p style="margin-top: 10px;">Same answer = We can trust it!</p>
+                </div>
+                <div class="box center">
+                    <h3>✅ This Isn't Random</h3>
+                    <p>The patterns we found are REAL</p>
+                    <p>Backed by mathematics</p>
+                    <p>Not just coincidence!</p>
+                </div>
+            </div>
+            <div class="slide-number">16 / 21</div>
+        </div>
+        
+        <!-- SLIDE 17: Limitations -->
+        <div class="slide">
+            <h2>⚠️ What We Couldn't Do</h2>
+            <h3 class="center">(Being Honest About Limitations)</h3>
+            
+            <div class="grid-2" style="margin-top: 30px;">
+                <div class="box">
+                    <h3>❌ Challenges</h3>
+                    <ul style="font-size: 1.2em;">
+                        <li>Only 3 years of data (need 5+)</li>
+                        <li>Can only predict 40% of salary</li>
+                        <li>No demographic data (gender, race)</li>
+                        <li>2022 had some data quality issues</li>
+                    </ul>
+                </div>
+                <div class="box" style="background: #dcfce7;">
+                    <h3>✅ But Still Good!</h3>
+                    <ul style="font-size: 1.2em;">
+                        <li>Found real patterns</li>
+                        <li>40% is meaningful</li>
+                        <li>Predictions are useful</li>
+                        <li>Can improve with more data</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p class="center" style="margin-top: 40px; font-size: 1.4em;">
+                <span class="highlight">Even with limitations, we discovered valuable insights! 🎯</span>
+            </p>
+            <div class="slide-number">17 / 21</div>
+        </div>
+        
+        <!-- SLIDE 18: Future Work -->
+        <div class="slide">
+            <h2>🚀 What's Next?</h2>
+            
+            <div class="box" style="background: #dbeafe; margin: 20px 0;">
+                <h3>📈 For Better Predictions</h3>
+                <ul style="font-size: 1.2em;">
+                    <li>Collect 10 years of data (not just 3)</li>
+                    <li>Add gender, age, race info</li>
+                    <li>Include performance ratings</li>
+                    <li>Track experience/tenure</li>
+                </ul>
+            </div>
+            
+            <div class="box" style="background: #dcfce7; margin: 20px 0;">
+                <h3>🏛️ For City Leaders</h3>
+                <ul style="font-size: 1.2em;">
+                    <li>Use our $2.45B forecast for 2025 budget</li>
+                    <li>Review Fire/Police overtime costs</li>
+                    <li>Check if pay gaps are fair</li>
+                    <li>Improve data collection</li>
+                </ul>
+            </div>
+            
+            <div class="box center" style="background: linear-gradient(120deg, #ffd700 0%, #ffed4e 100%); margin: 20px 0;">
+                <h3>💡 The Dream</h3>
+                <p style="font-size: 1.4em;">Build a real-time "Salary Calculator" app!</p>
+                <p>Input: Department + Job Title → Output: Salary Estimate</p>
+            </div>
+            <div class="slide-number">18 / 21</div>
+        </div>
+        
+        <!-- SLIDE 19: Recommendations -->
+        <div class="slide">
+            <h2>💡 What Should People Do?</h2>
+            
+            <div class="box" style="background: #dbeafe; margin: 15px 0;">
+                <h3>👨‍💼 Budget Planners</h3>
+                <p style="font-size: 1.2em;">✅ Budget <strong>$2.45 billion</strong> for 2025</p>
+                <p style="font-size: 1.2em;">✅ Plan for <strong>1.42%</strong> annual growth</p>
+                <p style="font-size: 1.2em;">✅ Focus on Fire/Police (highest costs)</p>
+            </div>
+            
+            <div class="box" style="background: #dcfce7; margin: 15px 0;">
+                <h3>👥 HR Managers</h3>
+                <p style="font-size: 1.2em;">✅ Know: Department = 40% of pay</p>
+                <p style="font-size: 1.2em;">✅ Manage overtime (29% get it, avg $21K)</p>
+                <p style="font-size: 1.2em;">✅ Tell candidates: "Department matters!"</p>
+            </div>
+            
+            <div class="box" style="background: #fef3c7; margin: 15px 0;">
+                <h3>🏛️ City Leaders</h3>
+                <p style="font-size: 1.2em;">✅ Review $99K Fire premium - is it fair?</p>
+                <p style="font-size: 1.2em;">✅ Hire vs overtime? Do the math!</p>
+                <p style="font-size: 1.2em;">✅ Use DATA to make decisions! 📊</p>
+            </div>
+            <div class="slide-number">19 / 21</div>
+        </div>
+        
+        <!-- SLIDE 20: Model Performance Table -->
+        <div class="slide">
+            <h2>📊 Model Performance Summary</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>R² (Test)</th>
+                        <th>Error (RMSE)</th>
+                        <th>Superpower</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Linear Regression</strong></td>
+                        <td class="blue">39.71%</td>
+                        <td>$50,968</td>
+                        <td>Easy to explain</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Random Forest</strong></td>
+                        <td class="green">40.27%</td>
+                        <td>$50,729</td>
+                        <td>Slightly better</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ARIMA</strong></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>Future forecasting</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="box center" style="margin-top: 40px;">
+                <p style="font-size: 1.5em;">Both models say the same thing: <strong>40% accurate!</strong></p>
+                <p style="font-size: 1.3em; margin-top: 15px;">When two different approaches agree → <span class="green">Trust the results!</span></p>
+            </div>
+            <div class="slide-number">20 / 21</div>
+        </div>
+        
+        <!-- SLIDE 21: Thank You -->
+        <div class="slide">
+            <h1>Thank You! 🙏</h1>
+            
+            <div class="box center" style="background: #e0f2fe; margin: 40px 0;">
+                <h3>🎯 Key Takeaways</h3>
+                <p style="font-size: 1.3em;">✅ Analyzed 74,546 Boston employees</p>
+                <p style="font-size: 1.3em;">✅ Built 3 prediction models (40% accurate)</p>
+                <p style="font-size: 1.3em;">✅ Department = 40% of your salary</p>
+                <p style="font-size: 1.3em;">✅ Fire +$99K, Police +$59K premium</p>
+                <p style="font-size: 1.3em;">✅ 2025 Forecast: $2.45 Billion</p>
+            </div>
+            
+            <div class="big-number" style="color: #22c55e;">Questions? 🤔</div>
+            
+            <div class="grid-2" style="margin-top: 30px;">
+                <div class="box center">
+                    <p><strong>Dev Panchal</strong></p>
+                    <p>panchal.d@northeastern.edu</p>
+                </div>
+                <div class="box center">
+                    <p><strong>Om Patel</strong></p>
+                    <p>patel.om@northeastern.edu</p>
+                </div>
+            </div>
+            <div class="slide-number">21 / 21</div>
+        </div>
+        
+    </div>
+    
+    <!-- Navigation -->
+    <div class="navigation">
+        <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+    
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            if (n >= totalSlides) currentSlide = totalSlides - 1;
+            if (n < 0) currentSlide = 0;
+            
+            slides[currentSlide].classList.add('active');
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            currentSlide += direction;
+            showSlide(currentSlide);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
